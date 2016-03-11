@@ -1,0 +1,24 @@
+path / {
+  read() = false;
+  write() = false;
+}
+
+type Signup {
+  email: String,
+  name: String,
+  created: InitialTimestamp
+}
+
+path /signups/{uid} is Signup {
+  create() { true }
+  delete() { false }
+  read() { false }
+}
+
+type InitialTimestamp extends Number {
+  validate() { initial(this, now) }
+}
+
+// Returns true if the value is intialized to init, or if it retains it's prior
+// value, otherwise.
+initial(value, init) { value == (prior(value) == null ? init : prior(value)) }

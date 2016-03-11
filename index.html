@@ -49,8 +49,10 @@
       <div class="row">
         <div class="col s12">
           <div class="z-depth-2">
-            <p>&nbsp;</p>
-          <form>
+          <p>&nbsp;</p>
+          <p id="signupError" class="signup-message-field red-text text-darken-2 red lighten-5 center-align">test</p>
+          <p id="signupSuccess" class="signup-message-field green-text text-darken-2 green lighten-5 center-align">test</p>
+          <form id="signup-form" class="signup-form" onsubmit="return signUp(this)">
             <div class="row">
               <div class="input-field col s10 offset-s1">
                 <i class="material-icons prefix">account_circle</i>
@@ -67,7 +69,7 @@
             </div>
             <div class="row">
               <div class="input-field col s10 offset-s1">
-                <button class="btn waves-effect waves-light" type="submit" name="action">Tilmeld
+                <button class="btn waves-effect waves-light" type="submit" name="action" id="signupButton">Tilmeld
                   <i class="material-icons right">send</i>
                 </button>
               </div>
@@ -163,9 +165,10 @@
       <div class="row">
       </div>
     </div>
+    <script src="mailchecker.js" charset="utf-8"></script>
     <script type="text/javascript">
-      var siteReadyDate = new Date(2016, 3, 4, 12, 0);
-      $('#symbolia_ready_countdown').countdown({until: siteReadyDate});
+      // var siteReadyDate = new Date(2016, 3, 4, 12, 0);
+      // $('#symbolia_ready_countdown').countdown({until: siteReadyDate});
       // Should use this instead of google backed document.
       // http://www.fizerkhan.com/blog/posts/Startup-Landing-Pages-with-Firebase.html
       // countdown(
@@ -174,6 +177,44 @@
       //     document.getElementById('symbolia_ready_countdown').innerHTML = ts.toHTML("strong");
       //   },
       //   countdown.HOURS|countdown.MINUTES|countdown.SECONDS);
+
+      var onSignupComplete = function(error) {
+        $('#formprogress').hide();
+        if (error) {
+          $('#signupError').html("En fejl har sket, venligst forsøg igen.");
+          $('#signupError').show();
+          $('form').show();
+        } else {
+          $('#signupSuccess').html("Tak " + $("#name").val() + "! Du registrerte email: <strong>" + $("#email").val() + "</strong>");
+          $('#signupSuccess').show();
+        }
+        $('#signupButton').disabled = false;
+      }
+      function validateName(name) {
+        return true;
+      }
+      function signUp(form) {
+        $('.signup-message-field').hide();
+        $('#signupButton').disabled = false;
+        if (window.MailChecker($('#email').val()) == false) {
+          $('#signupError').html('Venligst kontroller e-mail adressen igen.');
+          $('#signupError').show();
+          return false;
+        }
+        if (validateName($('#name').val()) == false) {
+          $('#signupError').html('Venligst kontroller at navnet ikke inholder tegn.');
+          $('#signupError').show();
+          return false;
+        }
+        $('form').hide();
+        $('#formprogress').show();
+        var myFirebaseRef = new Firebase("https://symbolia-signup.firebaseio.com/signups");
+        myFirebaseRef.push({
+                  name: $('#name').val(),
+                  email: $('#email').val()
+                  }, onSignupComplete);
+        return false;
+      }
     </script>
     <script src="http://localhost:35729/livereload.js"></script>
 

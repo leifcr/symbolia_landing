@@ -93,3 +93,8 @@
 nav ul a {
   color: black;
 }
+
+.signup-message-field{
+  height: 30px;
+  font-size: 19px;
+}

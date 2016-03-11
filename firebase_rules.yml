@@ -1,0 +1,29 @@
+functions:
+  - isLoggedIn(): auth.uid !== null
+  - createOnly(): next.exists() && !prev.exists()
+
+schema:
+  type: object
+  properties:
+    signups:
+      type: object
+      $signupId:
+        type: object
+        required: [name, email]
+        properties:
+          id:
+            type: string
+            constraint: next == $userid
+          email:
+            type: string
+            constraint: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$/i
+
+        constraint: (!prev.exists())
+
+access:
+  - location: /
+    read:  isLoggedIn()
+    write: false
+  - location: /signups
+    write: true
+    read: false
