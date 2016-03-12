@@ -48,10 +48,10 @@
       </div>
       <div class="row">
         <div class="col s12">
-          <div class="z-depth-2">
+          <div class="z-depth-2 signupform_holder">
           <p>&nbsp;</p>
-          <p id="signupError" class="signup-message-field red-text text-darken-2 red lighten-5 center-align">test</p>
-          <p id="signupSuccess" class="signup-message-field green-text text-darken-2 green lighten-5 center-align">test</p>
+          <p id="signupError" class="signup-message-field red-text text-darken-2 red lighten-5 center-align" style="display: none;"></p>
+          <p id="signupSuccess" class="signup-message-field green-text text-darken-2 green lighten-5 center-align" style="display: none;"></p>
           <form id="signup-form" class="signup-form" onsubmit="return signUp(this)">
             <div class="row">
               <div class="input-field col s10 offset-s1">
@@ -86,6 +86,7 @@
         </div>
       </div>
       <div class="row">
+
         <div class="col s12 m6">
           <div class="card z-depth-2">
             <div class="card-image">
@@ -102,8 +103,12 @@
                 <li><i class="tiny material-icons">chevron_right</i>Intelligent sproganalyse af ord</li>
               </ul>
             </div>
+            <div class="card-action">
+              <a href="http://www.widgit.com/symwriter">Læs mere om SymWriter 2</a>
+            </div>
           </div>
         </div>
+
         <div class="col s12 m6">
           <div class="card z-depth-2">
             <div class="card-image">
@@ -119,6 +124,9 @@
                 <li><i class="tiny material-icons">chevron_right</i>Lav vendespil, bingo eller billedlotteri</li>
                 <li><i class="tiny material-icons">chevron_right</i>Lav opgaver til interaktive tavler            </li>
               </ul>
+            </div>
+            <div class="card-action">
+              <a href="http://www.widgit.com/inprint">Læs mere om In Print 2</a>
             </div>
           </div>
         </div>
@@ -138,6 +146,9 @@
                 <li><i class="tiny material-icons">chevron_right</i>Kan benyttes på mac, pc og tablets</li>
               </ul>
             </div>
+            <div class="card-action">
+              <a href="http://www.widgit.com/products/widgit-online">Læs mere om Widgit Online</a>
+            </div>
           </div>
         </div>
         <div class="col s12 m6">
@@ -156,14 +167,37 @@
                 <li>&nbsp;</li>
               </ul>
             </div>
+            <div class="card-action">
+              <a href="http://www.widgit.com/products/widgit-go">Læs mere om Widgit Go</a>
+            </div>
+
           </div>
         </div>
 
       </div>
+      <footer class="page-footer blue darken-4">
+        <div class="container">
+          <div class="row">
+            <div class="col s6">
+              <h5 class="white-text">Symbolia IVS</h5>
+              <p class="grey-text text-lighten-4">Amagerfælledvej 56<br>
+                2300 København S
+              </p>
+              <p class="grey-text text-lighten-4"><a href="mailto:info@symbolia.com">info@symbolia.com</a></p>
+            </div>
+            <div class="col s6 right-align">
+              <img src="http://www.widgit.com/widgit_branding/widgit_logo.png" alt="Widgit Logo" width="250" /><br>
+              <p class="grey-text text-lighten-4"><a href="https://www.widgit.com">widgit.com</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="footer-copyright">
+          <div class="container">
+          © 2016 Symbolia IVS
+          </div>
+        </div>
+      </footer>
 
-
-      <div class="row">
-      </div>
     </div>
     <script src="mailchecker.js" charset="utf-8"></script>
     <script type="text/javascript">
@@ -187,6 +221,7 @@
         } else {
           $('#signupSuccess').html("Tak " + $("#name").val() + "! Du registrerte email: <strong>" + $("#email").val() + "</strong>");
           $('#signupSuccess').show();
+          $('.signupform_holder').addClass('green lighten-5');
         }
         $('#signupButton').disabled = false;
       }
@@ -211,7 +246,8 @@
         var myFirebaseRef = new Firebase("https://symbolia-signup.firebaseio.com/signups");
         myFirebaseRef.push({
                   name: $('#name').val(),
-                  email: $('#email').val()
+                  email: $('#email').val(),
+                  created: Firebase.ServerValue.TIMESTAMP
                   }, onSignupComplete);
         return false;
       }

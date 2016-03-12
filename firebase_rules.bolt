@@ -1,6 +1,8 @@
+isLoggedIn() { auth != null }
+
 path / {
-  read() = false;
-  write() = false;
+  read() { isLoggedIn() }
+  write() { false }
 }
 
 type Signup {
@@ -10,9 +12,13 @@ type Signup {
 }
 
 path /signups/{uid} is Signup {
+  // create() { isNew(this) && ref.parent(this.email) = null}
+  index() { return ['email']; }
+  // create() { isNew(this) && isUnique(this, 'signups')}
   create() { true }
+  update() { false }
   delete() { false }
-  read() { false }
+  read() { isLoggedIn() }
 }
 
 type InitialTimestamp extends Number {
@@ -22,3 +28,8 @@ type InitialTimestamp extends Number {
 // Returns true if the value is intialized to init, or if it retains it's prior
 // value, otherwise.
 initial(value, init) { value == (prior(value) == null ? init : prior(value)) }
+
+isNew(ref) { prior(ref) == null }
+
+// !root.child('signups').child(newData.val()).exists()
+// isUnique(ref, tablename) { !root.child(tablename).child(ref) != null }
